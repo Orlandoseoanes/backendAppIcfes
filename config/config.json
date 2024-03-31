@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "prueba",
+    "password": "tMeque+2023+",
+    "database": "preicfes",
+    "host": "srv435312.hstgr.cloud",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "prueba",
+    "password": "tMeque+2023+",
+    "database": "preicfes",
+    "host": "srv435312.hstgr.cloud",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "prueba",
+    "password": "tMeque+2023+",
+    "database": "preicfes",
+    "host": "srv435312.hstgr.cloud",
+    "dialect": "mysql"
+  }
+}
