@@ -782,7 +782,7 @@ describe('Pruebas para la nota Global', () => {
     });
 
     // Prueba para verificar el manejo de strings
-    it('debería manejar correctamente un valor de tipo string para la nota de Global', async () => {
+    it('debería manejar correctamente un valor de tipo strings para la nota de Global', async () => {
         const data = {
             Global: "Doscientos cuarenta",
             // Otros campos de la nota...
