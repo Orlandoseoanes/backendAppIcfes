@@ -2,11 +2,24 @@ const router = require("express").Router();
 
 const ModeloGasto=require("../app/models/modeloGasto");
 
-router.post("/Registro/Gasto",async (req,res)=>{
-    const{Fecha,Tipo_gasto,Gasto,Descripcion,Id_Usuario,Grado}=req.body;
+router.post("/Registro/Gasto", async (req, res) => {
+    const { Fecha, Tipo_gasto, Gasto, Descripcion, Id_Usuario, Grado } = req.body;
 
-    try{
-        const NewGasto=await ModeloGasto.create({
+    try {
+
+        // Validación 2: Verificar que Gasto sea un número entre 200 y 20,000,000
+        if (isNaN(Gasto) || Gasto < 200 || Gasto > 20000000) {
+            return res.status(400).json({ message: 'El valor del gasto no es válido' });
+        }
+
+        // Validación 3: Verificar que Descripcion tenga una longitud válida
+        if (typeof Descripcion !== 'string' || Descripcion.length < 2 || Descripcion.length > 80) {
+            return res.status(400).json({ message: 'La descripción no es válida' });
+        }
+
+   
+        // Crear nuevo gasto si pasa todas las validaciones
+        const NewGasto = await ModeloGasto.create({
             Fecha,
             Tipo_gasto,
             Gasto,
@@ -14,9 +27,10 @@ router.post("/Registro/Gasto",async (req,res)=>{
             Id_Usuario,
             Grado
         });
+
         res.status(201).json({
             message: 'Nuevo Gasto creado exitosamente',
-            Gasto: NewGasto, // Cambiado 'curso' a 'cartera' para mayor claridad
+            Gasto: NewGasto,
         });
     } catch (error) {
         console.error(error);
@@ -24,9 +38,9 @@ router.post("/Registro/Gasto",async (req,res)=>{
             message: 'Error al crear gasto',
             error,
         });
-    
     }
 });
+
 
 router.get("/Gastos/Todos",async (req,res)=>{
     try{

@@ -2,8 +2,30 @@ const router = require("express").Router();
 const ModeloCartera = require("../app/models/modeloCartera");
 
 router.post("/Registro/Cartera", async (req, res) => {
-    const { Documento_alumno, Numero_recibo, Pago, Metodo_pago, Fecha,Grado } = req.body;
+    const { Documento_alumno, Numero_recibo, Pago, Metodo_pago, Fecha, Grado } = req.body;
     try {
+        // Validaciones
+        if (!Numero_recibo || isNaN(Numero_recibo) || Numero_recibo < 1 || Numero_recibo > 999) {
+            return res.status(400).json({ message: 'Número de recibo inválido' });
+        }
+        if (!Pago || isNaN(Pago) || Pago < 1000 || Pago > 500000) {
+            return res.status(400).json({ message: 'Pago inválido' });
+        }
+        const metodosValidos = ["Efectivo", "Transferencia Nequi", "Transferencia Bancolombia"];
+        if (!Metodo_pago || !metodosValidos.includes(Metodo_pago)) {
+            return res.status(400).json({ message: 'Método de pago inválido' });
+        }
+        const fechaActual = new Date();
+        const fechaLimite = new Date('2025-12-31');
+        if (!Fecha || new Date(Fecha) < fechaActual || new Date(Fecha) > fechaLimite) {
+            return res.status(400).json({ message: 'Fecha inválida' });
+        }
+        const gradosValidos = ["10", "11"];
+        if (!Grado || !gradosValidos.includes(Grado)) {
+            return res.status(400).json({ message: 'Grado inválido' });
+        }
+
+        // Crear nueva cartera si las validaciones pasan
         const newCartera = await ModeloCartera.create({
             Documento_alumno,
             Numero_recibo,
@@ -14,7 +36,7 @@ router.post("/Registro/Cartera", async (req, res) => {
         });
         res.status(201).json({
             message: 'Nuevo Pago creado exitosamente',
-            cartera: newCartera, // Cambiado 'curso' a 'cartera' para mayor claridad
+            cartera: newCartera,
         });
     } catch (error) {
         console.error(error);
