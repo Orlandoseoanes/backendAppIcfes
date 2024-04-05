@@ -10,6 +10,41 @@ const { Router } = require("express");
 router.post('/Usuario/Registro', async (req, res) => {
   const { cedula, nombre, apellido, usuario, contrasena, Nit_institucion } = req.body;
 
+  // Validación para la Cédula
+  if (!isValidCedula(cedula)) {
+      return res.status(400).json({
+          message: 'Cédula no válida. Debe ser un número entre 10000 y 9999999999.'
+      });
+  }
+
+  // Validación para el Nombre
+  if (!isValidNombre(nombre)) {
+      return res.status(400).json({
+          message: 'Nombre no válido. Debe tener entre 5 y 50 caracteres.'
+      });
+  }
+
+  // Validación para el Apellido
+  if (!isValidApellido(apellido)) {
+      return res.status(400).json({
+          message: 'Apellido no válido. Debe tener entre 5 y 50 caracteres.'
+      });
+  }
+
+  // Validación para el Usuario
+  if (!isValidUsuario(usuario)) {
+      return res.status(400).json({
+          message: 'Usuario no válido. Debe tener entre 5 y 50 caracteres.'
+      });
+  }
+
+  // Validación para la Contraseña
+  if (!isValidContrasena(contrasena)) {
+      return res.status(400).json({
+          message: 'Contraseña no válida. Debe tener entre 5 y 50 caracteres.'
+      });
+  }
+
   try {
       const newUsuario = await modelosUsuario.create({
           cedula,
@@ -31,6 +66,32 @@ router.post('/Usuario/Registro', async (req, res) => {
       });
   }
 });
+
+// Función para validar la Cédula
+function isValidCedula(cedula) {
+  return Number.isInteger(cedula) && cedula >= 10000 && cedula <= 9999999999;
+}
+
+// Función para validar el Nombre
+function isValidNombre(nombre) {
+  return typeof nombre === 'string' && nombre.length >= 5 && nombre.length <= 50;
+}
+
+// Función para validar el Apellido
+function isValidApellido(apellido) {
+  return typeof apellido === 'string' && apellido.length >= 5 && apellido.length <= 50;
+}
+
+// Función para validar el Usuario
+function isValidUsuario(usuario) {
+  return typeof usuario === 'string' && usuario.length >= 5 && usuario.length <= 50;
+}
+
+// Función para validar la Contraseña
+function isValidContrasena(contrasena) {
+  return typeof contrasena === 'string' && contrasena.length >= 5 && contrasena.length <= 50;
+}
+
 
 //login
 router.post('/login', async (req, res) => {

@@ -4,7 +4,7 @@ const apiUrl = 'http://localhost:3002/API/V2/Registro/Estudiante';
 
 
 describe('Pruebas para registro estudiante', () => {
-    
+
     describe('Pruebas para el Tipo de Documento', () => {
         it('debería crear un nuevo registro con tipo de documento válido', async () => {
             const data = {
@@ -124,60 +124,60 @@ describe('Pruebas para registro estudiante', () => {
 
     describe('Pruebas para el Nombre', () => {
         it('debería crear un nuevo registro con un nombre válido', async () => {
-        const data = {
-            Nombre: 'Juanito', // Nombre válido con longitud entre 5 y 50 caracteres
-            // Otros datos requeridos
-        };
+            const data = {
+                Nombre: 'Juanito', // Nombre válido con longitud entre 5 y 50 caracteres
+                // Otros datos requeridos
+            };
 
-        try {
-            const response = await axios.post(apiUrl, data);
-            expect(response.status).toBe(201);
-        } catch (error) {
-            console.error('Error al enviar la solicitud:', error);
-        }
-    });
+            try {
+                const response = await axios.post(apiUrl, data);
+                expect(response.status).toBe(201);
+            } catch (error) {
+                console.error('Error al enviar la solicitud:', error);
+            }
+        });
 
-    it('debería manejar correctamente un error al enviar un nombre demasiado corto', async () => {
-        const data = {
-            Nombre: 'Ana', // Nombre con menos de 5 caracteres
-            // Otros datos requeridos
-        };
+        it('debería manejar correctamente un error al enviar un nombre demasiado corto', async () => {
+            const data = {
+                Nombre: 'Ana', // Nombre con menos de 5 caracteres
+                // Otros datos requeridos
+            };
 
-        try {
-            await axios.post(apiUrl, data);
-            fail('Se esperaba que la solicitud fallara debido a un nombre demasiado corto');
-        } catch (error) {
-            expect(error.response.status).toBe(400);
-        }
-    });
+            try {
+                await axios.post(apiUrl, data);
+                fail('Se esperaba que la solicitud fallara debido a un nombre demasiado corto');
+            } catch (error) {
+                expect(error.response.status).toBe(400);
+            }
+        });
 
-    it('debería manejar correctamente un error al enviar un nombre demasiado largo', async () => {
-        const data = {
-            Nombre: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vehicula nisi eu leo eleifend', // Nombre con más de 50 caracteres
-            // Otros datos requeridos
-        };
+        it('debería manejar correctamente un error al enviar un nombre demasiado largo', async () => {
+            const data = {
+                Nombre: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vehicula nisi eu leo eleifend', // Nombre con más de 50 caracteres
+                // Otros datos requeridos
+            };
 
-        try {
-            await axios.post(apiUrl, data);
-            fail('Se esperaba que la solicitud fallara debido a un nombre demasiado largo');
-        } catch (error) {
-            expect(error.response.status).toBe(400);
-        }
-    });
+            try {
+                await axios.post(apiUrl, data);
+                fail('Se esperaba que la solicitud fallara debido a un nombre demasiado largo');
+            } catch (error) {
+                expect(error.response.status).toBe(400);
+            }
+        });
 
-    it('debería manejar correctamente un error al enviar un nombre nulo', async () => {
-        const data = {
-            Nombre: null, // Nombre nulo
-            // Otros datos requeridos
-        };
+        it('debería manejar correctamente un error al enviar un nombre nulo', async () => {
+            const data = {
+                Nombre: null, // Nombre nulo
+                // Otros datos requeridos
+            };
 
-        try {
-            await axios.post(apiUrl, data);
-            fail('Se esperaba que la solicitud fallara debido a un nombre nulo');
-        } catch (error) {
-            expect(error.response.status).toBe(400);
-        }
-    });
+            try {
+                await axios.post(apiUrl, data);
+                fail('Se esperaba que la solicitud fallara debido a un nombre nulo');
+            } catch (error) {
+                expect(error.response.status).toBe(400);
+            }
+        });
     });
 
     describe('Pruebas para el Apellido', () => {
@@ -186,7 +186,7 @@ describe('Pruebas para registro estudiante', () => {
                 Apellido: 'González', // Apellido válido con longitud entre 5 y 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -194,13 +194,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un apellido demasiado corto', async () => {
             const data = {
                 Apellido: 'Li', // Apellido con menos de 5 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un apellido demasiado corto');
@@ -208,13 +208,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un apellido demasiado largo', async () => {
             const data = {
                 Apellido: 'Pérez Martínez Sánchez López Rodríguez González Hernández García', // Apellido con más de 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un apellido demasiado largo');
@@ -222,13 +222,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un apellido nulo', async () => {
             const data = {
                 Apellido: null, // Apellido nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un apellido nulo');
@@ -244,7 +244,7 @@ describe('Pruebas para registro estudiante', () => {
                 Telefono: '3106326313', // Teléfono válido con 10 dígitos
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -252,13 +252,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un teléfono con menos de 10 dígitos', async () => {
             const data = {
                 Telefono: '31063263', // Teléfono con menos de 10 dígitos
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un teléfono con menos de 10 dígitos');
@@ -266,13 +266,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un teléfono con más de 10 dígitos', async () => {
             const data = {
                 Telefono: '310632631300', // Teléfono con más de 10 dígitos
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un teléfono con más de 10 dígitos');
@@ -280,13 +280,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un teléfono nulo', async () => {
             const data = {
                 Telefono: null, // Teléfono nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un teléfono nulo');
@@ -302,7 +302,7 @@ describe('Pruebas para registro estudiante', () => {
                 Direccion: 'Calle 123', // Dirección válida con longitud entre 5 y 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -310,13 +310,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar una dirección demasiado corta', async () => {
             const data = {
                 Direccion: 'Cll.', // Dirección con menos de 5 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a una dirección demasiado corta');
@@ -324,13 +324,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar una dirección demasiado larga', async () => {
             const data = {
                 Direccion: 'Avenida principal del barrio residencial Los Alamos, Calle 123, casa 45, segundo piso, departamento 3A', // Dirección con más de 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a una dirección demasiado larga');
@@ -338,13 +338,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar una dirección nula', async () => {
             const data = {
                 Direccion: null, // Dirección nula
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a una dirección nula');
@@ -360,7 +360,7 @@ describe('Pruebas para registro estudiante', () => {
                 Colegio: 'Colegio XYZ', // Colegio válido con longitud entre 5 y 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -368,13 +368,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un colegio demasiado corto', async () => {
             const data = {
                 Colegio: 'ABC', // Colegio con menos de 5 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un colegio demasiado corto');
@@ -382,13 +382,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un colegio demasiado largo', async () => {
             const data = {
                 Colegio: 'Colegio de Educación Secundaria y Bachillerato Santa María de Guadalupe', // Colegio con más de 50 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un colegio demasiado largo');
@@ -396,13 +396,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un colegio nulo', async () => {
             const data = {
                 Colegio: null, // Colegio nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un colegio nulo');
@@ -418,7 +418,7 @@ describe('Pruebas para registro estudiante', () => {
                 Municipio: 'Valledupar', // Municipio válido de la lista proporcionada
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -426,13 +426,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un municipio inválido', async () => {
             const data = {
                 Municipio: 'Bogotá', // Municipio no válido
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un municipio inválido');
@@ -440,13 +440,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un municipio nulo', async () => {
             const data = {
                 Municipio: null, // Municipio nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un municipio nulo');
@@ -462,7 +462,7 @@ describe('Pruebas para registro estudiante', () => {
                 NombreAcudiente: 'NombreAcudiente', // Nombre de acudiente válido con 16 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -470,13 +470,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un nombre de acudiente inválido', async () => {
             const data = {
                 NombreAcudiente: 'A', // Nombre de acudiente no válido con menos de 5 caracteres
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un nombre de acudiente inválido');
@@ -484,13 +484,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un nombre de acudiente nulo', async () => {
             const data = {
                 NombreAcudiente: null, // Nombre de acudiente nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un nombre de acudiente nulo');
@@ -506,7 +506,7 @@ describe('Pruebas para registro estudiante', () => {
                 TelefonoAcudiente: '1234567890', // Teléfono de acudiente válido con 10 dígitos
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -514,13 +514,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un teléfono de acudiente inválido', async () => {
             const data = {
                 TelefonoAcudiente: '123456', // Teléfono de acudiente no válido con menos de 10 dígitos
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un teléfono de acudiente inválido');
@@ -528,13 +528,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un teléfono de acudiente nulo', async () => {
             const data = {
                 TelefonoAcudiente: null, // Teléfono de acudiente nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un teléfono de acudiente nulo');
@@ -550,7 +550,7 @@ describe('Pruebas para registro estudiante', () => {
                 Estado: 'Paz y salvo', // Estado válido
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -558,13 +558,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un estado inválido', async () => {
             const data = {
                 Estado: 'Moroso', // Estado no válido
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un estado inválido');
@@ -572,13 +572,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un estado nulo', async () => {
             const data = {
                 Estado: null, // Estado nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un estado nulo');
@@ -594,7 +594,7 @@ describe('Pruebas para registro estudiante', () => {
                 Grado: '10', // Grado válido
                 // Otros datos requeridos
             };
-    
+
             try {
                 const response = await axios.post(apiUrl, data);
                 expect(response.status).toBe(201);
@@ -602,13 +602,13 @@ describe('Pruebas para registro estudiante', () => {
                 console.error('Error al enviar la solicitud:', error);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un grado inválido', async () => {
             const data = {
                 Grado: '9', // Grado no válido
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un grado inválido');
@@ -616,13 +616,13 @@ describe('Pruebas para registro estudiante', () => {
                 expect(error.response.status).toBe(400);
             }
         });
-    
+
         it('debería manejar correctamente un error al enviar un grado nulo', async () => {
             const data = {
                 Grado: null, // Grado nulo
                 // Otros datos requeridos
             };
-    
+
             try {
                 await axios.post(apiUrl, data);
                 fail('Se esperaba que la solicitud fallara debido a un grado nulo');
