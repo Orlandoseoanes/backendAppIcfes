@@ -1,7 +1,15 @@
 {
     "version": 2,
     "builds": [
-      { "src": "/*", "use": "@vercel/static" }
+      {
+        "src": "src/index.handler",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/.*",
+        "dest": "src/index.handler"
+      }
     ]
   }
-  
