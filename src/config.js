@@ -3,7 +3,7 @@ const config = {
         cors: {
             server: [
                 {
-                    origin: "http://localhost:4250", // Reemplaza con la URL de tu aplicación frontend
+                    origin: "http://localhost:3002", // Reemplaza con la URL de tu aplicación frontend
                     credentials: true
                 }
             ]
