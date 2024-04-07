@@ -105,6 +105,6 @@ router.get("/Notas/Todas",async (req,res)=>{
             message: 'Error interno del servidor',
         });
   }
-})
+});
 
 module.exports = router;

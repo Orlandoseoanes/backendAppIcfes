@@ -59,4 +59,5 @@ router.get("/Gastos/Todos",async (req,res)=>{
     }
 })
 
+
 module.exports = router;

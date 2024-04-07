@@ -163,7 +163,6 @@ router.get("/Usuario/Todosusuarios", async (req, res) => {
 });
 
 //usuario por id
-
 router.get("/Usuario/:cedula", async (req, res) => {
   const cedula = req.params.cedula;
 
