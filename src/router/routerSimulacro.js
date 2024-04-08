@@ -34,11 +34,15 @@ router.post("/Registro/Simulacro", async (req, res) => {
     }
 
     try {
+        // Obtener la fecha actual formateada
+        const fechaActual = new Date();
+        const fechaActualFormateada = fechaActual.toISOString().split('T')[0];
+
         const newSimulacro = await ModeloSimulacro.create({
             Id,
             Empresa,
             CuadernillosComprados,
-            Fecha_Simulacro,
+            Fecha_Simulacro: fechaActualFormateada, // Usar la fecha actual formateada
             Grado
         });
         res.status(201).json({
@@ -54,6 +58,7 @@ router.post("/Registro/Simulacro", async (req, res) => {
     }
 });
 
+
 // Función para validar la Empresa
 function isValidEmpresa(empresa) {
     return typeof empresa === 'string' && empresa.length >= 5 && empresa.length <= 50;
@@ -68,8 +73,12 @@ function isValidCuadernillosComprados(cuadernillos) {
 function isValidFechaSimulacro(fecha) {
     const fechaActual = new Date();
     const fechaLimite = new Date('2025-12-31');
-    return fecha && fecha >= fechaActual && fecha <= fechaLimite;
+    const fechaSimulacro = new Date(fecha);
+
+    // Verificar si la fecha es válida y está dentro del rango
+    return fechaSimulacro >= fechaActual && fechaSimulacro <= fechaLimite;
 }
+
 
 // Función para validar Grado
 function isValidGrado(grado) {
