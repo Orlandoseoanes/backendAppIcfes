@@ -76,6 +76,7 @@ function isValidGrado(grado) {
     return grado === "10" || grado === "11";
 }
 
+
 router.get("/Simulacros/TodosSimulacros",async(req,res)=>{
     try {
         const Simulacro = await ModeloSimulacro.findAll();
