@@ -108,18 +108,19 @@ router.get('/Docentes/:Documento', async (req, res) => { // Corregido el acceso 
 });
 
 //ACTUALIZAR DOCENTE
+//ACTUALIZAR DOCENTE
 router.put("/Docente/:Documento", async (req, res) => {
-    const { Documento } = req.params; // Obtener el ID del docente de los parámetros de la URL
+    const { Documento } = req.params;
     const {
          Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
-    } = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
-
-    // Verificar si el ID proporcionado es válido
-    if (!Documento) {
-        return res.status(400).json({ error: "ID de docente no válido" });
-    }
+    } = req.body;
 
     try {
+        // Verificar si el ID proporcionado es válido
+        if (!Documento || isNaN(Number(Documento))) {
+            return res.status(400).json({ error: "ID de docente no válido" });
+        }
+
         // Buscar el docente por su ID en la base de datos
         const docente = await modeloDocente.findByPk(Documento);
 
@@ -130,7 +131,7 @@ router.put("/Docente/:Documento", async (req, res) => {
 
         // Actualizar los datos del docente con los valores proporcionados en el cuerpo de la solicitud
         await docente.update({
-            Documento, Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
+            Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
         });
 
         // Devolver una respuesta indicando que el docente ha sido actualizado con éxito
@@ -149,6 +150,7 @@ router.put("/Docente/:Documento", async (req, res) => {
         return res.status(500).json({ error: "Error interno del servidor" });
     }
 });
+
 
 
 //BORRAR DOCENTE
