@@ -108,20 +108,20 @@ router.get('/Docentes/:Documento', async (req, res) => { // Corregido el acceso 
 });
 
 //ACTUALIZAR DOCENTE
-router.put("/Docente/:id", async (req, res) => {
-    const { id } = req.params; // Obtener el ID del docente de los parámetros de la URL
+router.put("/Docente/:Documento", async (req, res) => {
+    const { Documento } = req.params; // Obtener el ID del docente de los parámetros de la URL
     const {
-        Documento, Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
+         Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
     } = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
 
     // Verificar si el ID proporcionado es válido
-    if (!id) {
+    if (!Documento) {
         return res.status(400).json({ error: "ID de docente no válido" });
     }
 
     try {
         // Buscar el docente por su ID en la base de datos
-        const docente = await modeloDocente.findByPk(id);
+        const docente = await modeloDocente.findByPk(Documento);
 
         // Si el docente no se encuentra, devolver un error
         if (!docente) {
