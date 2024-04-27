@@ -135,7 +135,6 @@ router.put("/Docente/:Documento", async (req, res) => {
 
         // Devolver una respuesta indicando que el docente ha sido actualizado con éxito
         return res.json({
-            id,
             Documento,
             Nombre,
             Apellido,
