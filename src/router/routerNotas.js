@@ -176,14 +176,14 @@ router.get("/Notas/simulacro", async (req, res) => {
 
             if (!promedioPorSimulacro.hasOwnProperty(simulacroId)) {
                 promedioPorSimulacro[simulacroId] = {
-                    simulacro: simulacroNombre,
                     Nota_LecturaCritica: 0,
                     Nota_Matematicas: 0,
                     Nota_Sociales: 0,
                     Nota_Naturales: 0,
                     Nota_Ingles: 0,
                     Global: 0,
-                    cantidad: 0
+                    cantidad: 0,
+                    simulacro: simulacroNombre // Agregamos el ID del simulacro como una propiedad
                 };
             }
 
@@ -208,17 +208,10 @@ router.get("/Notas/simulacro", async (req, res) => {
             delete promedioPorSimulacro[idSimulacro].cantidad;
         }
 
-        // Ajustar la estructura de salida
-        const data = {};
-        for (const idSimulacro in promedioPorSimulacro) {
-            data[promedioPorSimulacro[idSimulacro].simulacro] = promedioPorSimulacro[idSimulacro];
-            delete promedioPorSimulacro[idSimulacro].simulacro;
-        }
-
         // Si se encuentran notas, retornarlas junto con el promedio en la respuesta
         res.status(200).json({
             status: 200,
-            data: data
+            data: promedioPorSimulacro
         });
     } catch (error) {
         // Manejo de errores
@@ -229,6 +222,7 @@ router.get("/Notas/simulacro", async (req, res) => {
         });
     }
 });
+
 
 
 
