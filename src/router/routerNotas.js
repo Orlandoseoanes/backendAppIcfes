@@ -145,7 +145,7 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 });
 
 
-router.get("/Notas", async (req, res) => {
+router.get("/Notas/simulacros", async (req, res) => {
     try {
         // Buscar todas las notas con los nombres de los simulacros
         const notasConSimulacro = await Notas.findAll({
