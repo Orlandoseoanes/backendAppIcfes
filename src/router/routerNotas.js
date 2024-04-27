@@ -145,12 +145,14 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 });
 
 
-router.get("/Notas/simulacros", async (req, res) => {
+router.get("/Notas", async (req, res) => {
     try {
-        // Buscar todas las notas
-        const notas = await Notas.findAll();
+        // Buscar todas las notas con los nombres de los simulacros
+        const notasConSimulacro = await Notas.findAll({
+            include: 'Simulacro' // Suponiendo que 'Simulacro' es el nombre de la relación con la tabla Simulacros
+        });
         
-        if (notas.length === 0) {
+        if (notasConSimulacro.length === 0) {
             // Si no se encuentran notas, retornar un mensaje de not found
             res.status(404).json({
                 status: 404,
@@ -162,9 +164,13 @@ router.get("/Notas/simulacros", async (req, res) => {
         // Organizar las notas por ID de simulacro y calcular el promedio de cada tipo de nota
         const promedioPorSimulacro = {};
 
-        notas.forEach(nota => {
-            if (!promedioPorSimulacro.hasOwnProperty(nota.Id_Simulacro)) {
-                promedioPorSimulacro[nota.Id_Simulacro] = {
+        notasConSimulacro.forEach(nota => {
+            const simulacroId = nota.Simulacro.id;
+            const simulacroNombre = nota.Simulacro.nombre;
+
+            if (!promedioPorSimulacro.hasOwnProperty(simulacroId)) {
+                promedioPorSimulacro[simulacroId] = {
+                    simulacro: simulacroNombre,
                     Nota_LecturaCritica: 0,
                     Nota_Matematicas: 0,
                     Nota_Sociales: 0,
@@ -175,13 +181,13 @@ router.get("/Notas/simulacros", async (req, res) => {
                 };
             }
 
-            promedioPorSimulacro[nota.Id_Simulacro].Nota_LecturaCritica += nota.Nota_LecturaCritica;
-            promedioPorSimulacro[nota.Id_Simulacro].Nota_Matematicas += nota.Nota_Matematicas;
-            promedioPorSimulacro[nota.Id_Simulacro].Nota_Sociales += nota.Nota_Sociales;
-            promedioPorSimulacro[nota.Id_Simulacro].Nota_Naturales += nota.Nota_Naturales;
-            promedioPorSimulacro[nota.Id_Simulacro].Nota_Ingles += nota.Nota_Ingles;
-            promedioPorSimulacro[nota.Id_Simulacro].Global += nota.Global;
-            promedioPorSimulacro[nota.Id_Simulacro].cantidad++;
+            promedioPorSimulacro[simulacroId].Nota_LecturaCritica += nota.Nota_LecturaCritica;
+            promedioPorSimulacro[simulacroId].Nota_Matematicas += nota.Nota_Matematicas;
+            promedioPorSimulacro[simulacroId].Nota_Sociales += nota.Nota_Sociales;
+            promedioPorSimulacro[simulacroId].Nota_Naturales += nota.Nota_Naturales;
+            promedioPorSimulacro[simulacroId].Nota_Ingles += nota.Nota_Ingles;
+            promedioPorSimulacro[simulacroId].Global += nota.Global;
+            promedioPorSimulacro[simulacroId].cantidad++;
         });
 
         // Calcular el promedio para cada ID de simulacro
@@ -210,7 +216,6 @@ router.get("/Notas/simulacros", async (req, res) => {
         });
     }
 });
-
 
 
 
