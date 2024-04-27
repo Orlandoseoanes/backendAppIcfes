@@ -144,6 +144,8 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
     }
 });
 
+
+
 router.get("/Notas/simulacro", async (req, res) => {
     try {
         // Buscar todas las notas
@@ -208,10 +210,17 @@ router.get("/Notas/simulacro", async (req, res) => {
             delete promedioPorSimulacro[idSimulacro].cantidad;
         }
 
+        // Ajustar la estructura de salida
+        const data = {};
+        for (const idSimulacro in promedioPorSimulacro) {
+            data[promedioPorSimulacro[idSimulacro].simulacro] = promedioPorSimulacro[idSimulacro];
+            delete promedioPorSimulacro[idSimulacro].simulacro;
+        }
+
         // Si se encuentran notas, retornarlas junto con el promedio en la respuesta
         res.status(200).json({
             status: 200,
-            data: promedioPorSimulacro
+            data: data
         });
     } catch (error) {
         // Manejo de errores
