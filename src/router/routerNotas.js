@@ -146,12 +146,10 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 
 router.get("/Notas/simulacro", async (req, res) => {
     try {
-        // Buscar todas las notas con los nombres de los simulacros
-        const notasConSimulacro = await Notas.findAll({
-            include: 'Simulacro' // Suponiendo que 'Simulacro' es el nombre de la relación con la tabla Simulacros
-        });
+        // Buscar todas las notas
+        const notas = await Notas.findAll();
         
-        if (notasConSimulacro.length === 0) {
+        if (notas.length === 0) {
             // Si no se encuentran notas, retornar un mensaje de not found
             res.status(404).json({
                 status: 404,
@@ -163,9 +161,18 @@ router.get("/Notas/simulacro", async (req, res) => {
         // Organizar las notas por ID de simulacro y calcular el promedio de cada tipo de nota
         const promedioPorSimulacro = {};
 
-        notasConSimulacro.forEach(nota => {
-            const simulacroId = nota.Simulacro.Id_Simulacro;
-            const simulacroNombre = nota.Simulacro.nombre;
+        // Obtener los nombres de simulacro de las notas
+        const simulacroNombres = {};
+        notas.forEach(nota => {
+            const simulacroId = nota.Id_Simulacro;
+            if (!(simulacroId in simulacroNombres)) {
+                simulacroNombres[simulacroId] = nota.Id_Simulacro;
+            }
+        });
+
+        notas.forEach(nota => {
+            const simulacroId = nota.Id_Simulacro;
+            const simulacroNombre = simulacroNombres[simulacroId];
 
             if (!promedioPorSimulacro.hasOwnProperty(simulacroId)) {
                 promedioPorSimulacro[simulacroId] = {
@@ -215,6 +222,7 @@ router.get("/Notas/simulacro", async (req, res) => {
         });
     }
 });
+
 
 
 
