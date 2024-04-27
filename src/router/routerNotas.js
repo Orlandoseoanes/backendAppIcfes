@@ -197,14 +197,7 @@ router.get("/Notas/:Id_Simulacro", async (req, res) => {
         res.status(200).json({
             status: 200,
             data: {
-                notas: notas.map(nota => ({
-                    Nota_LecturaCritica: nota.Nota_LecturaCritica,
-                    Nota_Matematicas: nota.Nota_Matematicas,
-                    Nota_Sociales: nota.Nota_Sociales,
-                    Nota_Naturales: nota.Nota_Naturales,
-                    Nota_Ingles: nota.Nota_Ingles,
-                    Global: nota.Global
-                })),
+                
                 promedio: promedioNotas
             }
         });
