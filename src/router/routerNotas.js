@@ -208,10 +208,13 @@ router.get("/Notas/simulacro", async (req, res) => {
             delete promedioPorSimulacro[idSimulacro].cantidad;
         }
 
+        // Ajustar la estructura de salida
+        const data = Object.values(promedioPorSimulacro);
+
         // Si se encuentran notas, retornarlas junto con el promedio en la respuesta
         res.status(200).json({
             status: 200,
-            data: promedioPorSimulacro
+            data: data
         });
     } catch (error) {
         // Manejo de errores
@@ -222,6 +225,7 @@ router.get("/Notas/simulacro", async (req, res) => {
         });
     }
 });
+
 
 
 
