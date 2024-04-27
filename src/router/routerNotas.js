@@ -164,20 +164,49 @@ router.get("/Notas/:Id_Simulacro", async (req, res) => {
             return;
         }
 
-        // Extraer solo las notas relevantes de cada objeto de notas
-        const notasRelevantes = notas.map(nota => ({
-            Nota_LecturaCritica: nota.Nota_LecturaCritica,
-            Nota_Matematicas: nota.Nota_Matematicas,
-            Nota_Sociales: nota.Nota_Sociales,
-            Nota_Naturales: nota.Nota_Naturales,
-            Nota_Ingles: nota.Nota_Ingles,
-            Global: nota.Global
-        }));
+        // Calcular el promedio de cada tipo de nota
+        const sumaNotas = {
+            Nota_LecturaCritica: 0,
+            Nota_Matematicas: 0,
+            Nota_Sociales: 0,
+            Nota_Naturales: 0,
+            Nota_Ingles: 0,
+            Global: 0
+        };
 
-        // Si se encuentran notas, retornarlas en la respuesta
+        notas.forEach(nota => {
+            sumaNotas.Nota_LecturaCritica += nota.Nota_LecturaCritica;
+            sumaNotas.Nota_Matematicas += nota.Nota_Matematicas;
+            sumaNotas.Nota_Sociales += nota.Nota_Sociales;
+            sumaNotas.Nota_Naturales += nota.Nota_Naturales;
+            sumaNotas.Nota_Ingles += nota.Nota_Ingles;
+            sumaNotas.Global += nota.Global;
+        });
+
+        const cantidadNotas = notas.length;
+        const promedioNotas = {
+            Nota_LecturaCritica: sumaNotas.Nota_LecturaCritica / cantidadNotas,
+            Nota_Matematicas: sumaNotas.Nota_Matematicas / cantidadNotas,
+            Nota_Sociales: sumaNotas.Nota_Sociales / cantidadNotas,
+            Nota_Naturales: sumaNotas.Nota_Naturales / cantidadNotas,
+            Nota_Ingles: sumaNotas.Nota_Ingles / cantidadNotas,
+            Global: sumaNotas.Global / cantidadNotas
+        };
+
+        // Si se encuentran notas, retornarlas junto con el promedio en la respuesta
         res.status(200).json({
             status: 200,
-            data: notasRelevantes
+            data: {
+                notas: notas.map(nota => ({
+                    Nota_LecturaCritica: nota.Nota_LecturaCritica,
+                    Nota_Matematicas: nota.Nota_Matematicas,
+                    Nota_Sociales: nota.Nota_Sociales,
+                    Nota_Naturales: nota.Nota_Naturales,
+                    Nota_Ingles: nota.Nota_Ingles,
+                    Global: nota.Global
+                })),
+                promedio: promedioNotas
+            }
         });
     } catch (error) {
         // Manejo de errores
@@ -188,6 +217,7 @@ router.get("/Notas/:Id_Simulacro", async (req, res) => {
         });
     }
 });
+
 
 
 
