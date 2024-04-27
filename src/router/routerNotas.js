@@ -3,6 +3,7 @@ const { Router } = require("express");
 const xlsx = require("xlsx");
 const Notas =require("../app/models/modeloNotas");
 const multer = require("multer");
+const { Op } = require('sequelize');
 
 
 const storage = multer.memoryStorage();
@@ -90,6 +91,7 @@ function isValidNota(nota) {
 function isValidGlobal(global) {
     return typeof global === 'number' && Number.isInteger(global) && global >= 0 && global <= 500;
 }
+
 router.get("/Notas/Todas",async (req,res)=>{
   try{
     const NewNotas =await Notas.findAll() ;
@@ -106,5 +108,46 @@ router.get("/Notas/Todas",async (req,res)=>{
         });
   }
 });
+
+router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
+    const { idSimulacro } = req.params; // Obtener el ID del simulacro de los parámetros de la URL
+
+    // Verificar si el ID proporcionado es válido
+    if (!idSimulacro) {
+        return res.status(400).json({ error: "ID de simulacro no válido" });
+    }
+
+    try {
+        // Eliminar todas las notas asociadas al ID de simulacro proporcionado
+        const notasEliminadas = await Notas.destroy({
+            where: { Id_Simulacro: idSimulacro }
+        });
+
+        // Verificar si se eliminaron notas y devolver una respuesta apropiada
+        if (notasEliminadas > 0) {
+            return res.json({
+                success: true,
+                message: `Se han eliminado ${notasEliminadas} notas asociadas al simulacro con ID ${idSimulacro}`
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: `No se encontraron notas asociadas al simulacro con ID ${idSimulacro}`
+            });
+        }
+    } catch (error) {
+        console.error("Error al eliminar las notas:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+
+
+
+
+
+
+
+
 
 module.exports = router;

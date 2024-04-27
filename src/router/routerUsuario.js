@@ -4,6 +4,7 @@ const modelosUsuario=require('../app/models/modelosusuario')
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken'); // Importa la biblioteca jsonwebtoken
 const { Router } = require("express");
+const modelosGastos = require('../app/models/modeloGasto');
 
 
 //REGISTRO USUARIO
@@ -191,6 +192,49 @@ router.get("/Usuario/:cedula", async (req, res) => {
     });
   }
 });
+
+
+router.put("/Usuario/:cedula", async (req, res) => {
+  const cedula = req.params.cedula;
+  const nuevosDatosUsuario = req.body; // Los nuevos datos del usuario que vienen en el cuerpo de la solicitud
+  try {
+    // Busca el usuario que se va a actualizar
+    const usuario = await modelosUsuario.findOne({
+      where: {
+        cedula: cedula,
+      },
+    });
+
+    if (!usuario) {
+      return res.status(404).json({
+        message: 'Usuario no encontrado',
+      });
+    }
+
+    // Actualiza los registros de gastos relacionados con el usuario si es necesario
+    if (nuevosDatosUsuario.hasOwnProperty('id')) {
+      await modelosGastos.update(
+        { Id_Usuario: nuevosDatosUsuario.id },
+        { where: { Id_Usuario: usuario.id } }
+      );
+    }
+
+    // Actualiza todos los datos del usuario
+    await usuario.update(nuevosDatosUsuario);
+
+    res.status(200).json({
+      message: 'Usuario actualizado exitosamente',
+      usuario: usuario,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Error al actualizar usuario',
+      error,
+    });
+  }
+});
+
 
 
 

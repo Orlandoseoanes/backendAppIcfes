@@ -107,5 +107,81 @@ router.get('/Docentes/:Documento', async (req, res) => { // Corregido el acceso 
     }
 });
 
+//ACTUALIZAR DOCENTE
+router.put("/Docente/:id", async (req, res) => {
+    const { id } = req.params; // Obtener el ID del docente de los parámetros de la URL
+    const {
+        Documento, Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
+    } = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+
+    // Verificar si el ID proporcionado es válido
+    if (!id) {
+        return res.status(400).json({ error: "ID de docente no válido" });
+    }
+
+    try {
+        // Buscar el docente por su ID en la base de datos
+        const docente = await modeloDocente.findByPk(id);
+
+        // Si el docente no se encuentra, devolver un error
+        if (!docente) {
+            return res.status(404).json({ error: "Docente no encontrado" });
+        }
+
+        // Actualizar los datos del docente con los valores proporcionados en el cuerpo de la solicitud
+        await docente.update({
+            Documento, Nombre, Apellido, Telefono, Materia_Dicta, Cobro, Nit_institucion
+        });
+
+        // Devolver una respuesta indicando que el docente ha sido actualizado con éxito
+        return res.json({
+            id,
+            Documento,
+            Nombre,
+            Apellido,
+            Telefono,
+            Materia_Dicta,
+            Cobro,
+            Nit_institucion,
+            message: "Docente actualizado exitosamente"
+        });
+    } catch (error) {
+        console.error("Error al actualizar el docente:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+
+//BORRAR DOCENTE
+router.delete("/Docente/:id", async (req, res) => {
+    const { id } = req.params; // Obtener el ID del docente de los parámetros de la URL
+
+    // Verificar si el ID proporcionado es válido
+    if (!id) {
+        return res.status(400).json({ error: "ID de docente no válido" });
+    }
+
+    try {
+        // Buscar el docente por su ID en la base de datos
+        const docente = await modeloDocente.findByPk(id);
+
+        // Si el docente no se encuentra, devolver un error
+        if (!docente) {
+            return res.status(404).json({ error: "Docente no encontrado" });
+        }
+
+        // Eliminar el docente de la base de datos
+        await docente.destroy();
+
+        // Devolver una respuesta indicando que el docente ha sido eliminado con éxito
+        return res.json({ message: "Docente eliminado correctamente" });
+    } catch (error) {
+        console.error("Error al eliminar el docente:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+
+
 
 module.exports=router;

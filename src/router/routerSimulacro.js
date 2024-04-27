@@ -93,4 +93,76 @@ router.get("/Simulacros/TodosSimulacros",async(req,res)=>{
     }
 });
 
+router.put("/Simulacro/:id", async (req, res) => {
+    const { id } = req.params; // Obtener el ID del simulacro de los parámetros de la URL
+    const { Empresa, CuadernillosComprados, Fecha_Simulacro, Grado } = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+
+    // Verificar si el ID proporcionado es válido
+    if (!id) {
+        return res.status(400).json({ error: "ID de simulacro no válido" });
+    }
+
+    try {
+        // Buscar el simulacro por su ID en la base de datos
+        const simulacro = await ModeloSimulacro.findByPk(id);
+
+        // Si el simulacro no se encuentra, devolver un error
+        if (!simulacro) {
+            return res.status(404).json({ error: "Simulacro no encontrado" });
+        }
+
+        // Validar los datos actualizados del simulacro
+        if (!isValidEmpresa(Empresa) || !isValidCuadernillosComprados(CuadernillosComprados) || !isValidFechaSimulacro(Fecha_Simulacro) || !isValidGrado(Grado)) {
+            return res.status(400).json({ error: "Los datos proporcionados para la actualización no son válidos" });
+        }
+
+        // Actualizar el simulacro con los nuevos datos
+        await simulacro.update({
+            Empresa,
+            CuadernillosComprados,
+            Fecha_Simulacro,
+            Grado
+        });
+
+        // Devolver una respuesta indicando que el simulacro ha sido actualizado con éxito
+        return res.json({
+            message: "Simulacro actualizado exitosamente",
+            simulacro: simulacro
+        });
+    } catch (error) {
+        console.error("Error al actualizar el simulacro:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+router.delete("/Simulacro/:id", async (req, res) => {
+    const { id } = req.params; // Obtener el ID del simulacro de los parámetros de la URL
+
+    // Verificar si el ID proporcionado es válido
+    if (!id) {
+        return res.status(400).json({ error: "ID de simulacro no válido" });
+    }
+
+    try {
+        // Buscar el simulacro por su ID en la base de datos
+        const simulacro = await ModeloSimulacro.findByPk(id);
+
+        // Si el simulacro no se encuentra, devolver un error
+        if (!simulacro) {
+            return res.status(404).json({ error: "Simulacro no encontrado" });
+        }
+
+        // Eliminar el simulacro de la base de datos
+        await simulacro.destroy();
+
+        // Devolver una respuesta indicando que el simulacro ha sido eliminado con éxito
+        return res.json({ message: "Simulacro eliminado correctamente" });
+    } catch (error) {
+        console.error("Error al eliminar el simulacro:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+
+
 module.exports = router;

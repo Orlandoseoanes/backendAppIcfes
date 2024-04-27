@@ -83,13 +83,13 @@ router.post('/Registro/Estudiante', async (req, res) => {
         }
 
         // Validación del estado
-        const estadosValidos = ["Paz y salvo", "Deudor", "Ninguna orden válida"];
+        const estadosValidos = ["Paz y salvo", "Deudor" ];
         if (!estadosValidos.includes(Estado)) {
             throw new Error('Estado inválido');
         }
 
         // Validación del grado
-        const gradosValidos = ["10", "11", "Ninguna orden válida"];
+        const gradosValidos = ["10", "11"];
         if (!gradosValidos.includes(Grado)) {
             throw new Error('Grado inválido');
         }
@@ -164,5 +164,6 @@ router.get('/Estudiantes/:Documento', async (req, res) => { // Corregido el acce
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 module.exports=router;
