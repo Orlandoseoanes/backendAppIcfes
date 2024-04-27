@@ -146,6 +146,39 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 
 
 
+router.get("/Notas/:Id_Simulacro", async (req, res) => {
+    const { Id_Simulacro } = req.params;
+    try {
+        // Buscar todas las notas que correspondan al ID del simulacro proporcionado
+        const notas = await Notas.findAll({
+            where: {
+                Id_Simulacro
+            }
+        });
+        
+        if (notas.length === 0) {
+            // Si no se encuentran notas para el ID del simulacro, retornar un mensaje de not found
+            res.status(404).json({
+                status: 404,
+                message: 'No se encontraron notas para el ID de simulacro proporcionado.'
+            });
+            return;
+        }
+
+        // Si se encuentran notas, retornarlas en la respuesta
+        res.status(200).json({
+            status: 200,
+            data: notas
+        });
+    } catch (error) {
+        // Manejo de errores
+        console.error('Error al obtener las notas:', error);
+        res.status(500).json({
+            status: 500,
+            message: 'Error interno del servidor'
+        });
+    }
+});
 
 
 
