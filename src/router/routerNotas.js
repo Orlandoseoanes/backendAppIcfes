@@ -145,61 +145,61 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 });
 
 
-router.get("/Notas/:Id_Simulacro", async (req, res) => {
-    const { Id_Simulacro } = req.params;
+router.get("/Notas/simulacros", async (req, res) => {
     try {
-        // Buscar todas las notas que correspondan al ID del simulacro proporcionado
-        const notas = await Notas.findAll({
-            where: {
-                Id_Simulacro
-            }
-        });
+        // Buscar todas las notas
+        const notas = await Notas.findAll();
         
         if (notas.length === 0) {
-            // Si no se encuentran notas para el ID del simulacro, retornar un mensaje de not found
+            // Si no se encuentran notas, retornar un mensaje de not found
             res.status(404).json({
                 status: 404,
-                message: 'No se encontraron notas para el ID de simulacro proporcionado.'
+                message: 'No se encontraron notas.'
             });
             return;
         }
 
-        // Calcular el promedio de cada tipo de nota
-        const sumaNotas = {
-            Nota_LecturaCritica: 0,
-            Nota_Matematicas: 0,
-            Nota_Sociales: 0,
-            Nota_Naturales: 0,
-            Nota_Ingles: 0,
-            Global: 0
-        };
+        // Organizar las notas por ID de simulacro y calcular el promedio de cada tipo de nota
+        const promedioPorSimulacro = {};
 
         notas.forEach(nota => {
-            sumaNotas.Nota_LecturaCritica += nota.Nota_LecturaCritica;
-            sumaNotas.Nota_Matematicas += nota.Nota_Matematicas;
-            sumaNotas.Nota_Sociales += nota.Nota_Sociales;
-            sumaNotas.Nota_Naturales += nota.Nota_Naturales;
-            sumaNotas.Nota_Ingles += nota.Nota_Ingles;
-            sumaNotas.Global += nota.Global;
+            if (!promedioPorSimulacro.hasOwnProperty(nota.Id_Simulacro)) {
+                promedioPorSimulacro[nota.Id_Simulacro] = {
+                    Nota_LecturaCritica: 0,
+                    Nota_Matematicas: 0,
+                    Nota_Sociales: 0,
+                    Nota_Naturales: 0,
+                    Nota_Ingles: 0,
+                    Global: 0,
+                    cantidad: 0
+                };
+            }
+
+            promedioPorSimulacro[nota.Id_Simulacro].Nota_LecturaCritica += nota.Nota_LecturaCritica;
+            promedioPorSimulacro[nota.Id_Simulacro].Nota_Matematicas += nota.Nota_Matematicas;
+            promedioPorSimulacro[nota.Id_Simulacro].Nota_Sociales += nota.Nota_Sociales;
+            promedioPorSimulacro[nota.Id_Simulacro].Nota_Naturales += nota.Nota_Naturales;
+            promedioPorSimulacro[nota.Id_Simulacro].Nota_Ingles += nota.Nota_Ingles;
+            promedioPorSimulacro[nota.Id_Simulacro].Global += nota.Global;
+            promedioPorSimulacro[nota.Id_Simulacro].cantidad++;
         });
 
-        const cantidadNotas = notas.length;
-        const promedioNotas = {
-            Nota_LecturaCritica: sumaNotas.Nota_LecturaCritica / cantidadNotas,
-            Nota_Matematicas: sumaNotas.Nota_Matematicas / cantidadNotas,
-            Nota_Sociales: sumaNotas.Nota_Sociales / cantidadNotas,
-            Nota_Naturales: sumaNotas.Nota_Naturales / cantidadNotas,
-            Nota_Ingles: sumaNotas.Nota_Ingles / cantidadNotas,
-            Global: sumaNotas.Global / cantidadNotas
-        };
+        // Calcular el promedio para cada ID de simulacro
+        for (const idSimulacro in promedioPorSimulacro) {
+            const cantidadNotas = promedioPorSimulacro[idSimulacro].cantidad;
+            promedioPorSimulacro[idSimulacro].Nota_LecturaCritica /= cantidadNotas;
+            promedioPorSimulacro[idSimulacro].Nota_Matematicas /= cantidadNotas;
+            promedioPorSimulacro[idSimulacro].Nota_Sociales /= cantidadNotas;
+            promedioPorSimulacro[idSimulacro].Nota_Naturales /= cantidadNotas;
+            promedioPorSimulacro[idSimulacro].Nota_Ingles /= cantidadNotas;
+            promedioPorSimulacro[idSimulacro].Global /= cantidadNotas;
+            delete promedioPorSimulacro[idSimulacro].cantidad;
+        }
 
         // Si se encuentran notas, retornarlas junto con el promedio en la respuesta
         res.status(200).json({
             status: 200,
-            data: {
-                
-                promedio: promedioNotas
-            }
+            data: promedioPorSimulacro
         });
     } catch (error) {
         // Manejo de errores
