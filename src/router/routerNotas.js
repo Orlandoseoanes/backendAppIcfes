@@ -145,7 +145,6 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
 });
 
 
-
 router.get("/Notas/:Id_Simulacro", async (req, res) => {
     const { Id_Simulacro } = req.params;
     try {
@@ -165,10 +164,20 @@ router.get("/Notas/:Id_Simulacro", async (req, res) => {
             return;
         }
 
+        // Extraer solo las notas relevantes de cada objeto de notas
+        const notasRelevantes = notas.map(nota => ({
+            Nota_LecturaCritica: nota.Nota_LecturaCritica,
+            Nota_Matematicas: nota.Nota_Matematicas,
+            Nota_Sociales: nota.Nota_Sociales,
+            Nota_Naturales: nota.Nota_Naturales,
+            Nota_Ingles: nota.Nota_Ingles,
+            Global: nota.Global
+        }));
+
         // Si se encuentran notas, retornarlas en la respuesta
         res.status(200).json({
             status: 200,
-            data: notas
+            data: notasRelevantes
         });
     } catch (error) {
         // Manejo de errores
@@ -179,8 +188,6 @@ router.get("/Notas/:Id_Simulacro", async (req, res) => {
         });
     }
 });
-
-
 
 
 
