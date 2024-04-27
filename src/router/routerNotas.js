@@ -144,8 +144,7 @@ router.delete("/Notas/BorrarPorSimulacro/:idSimulacro", async (req, res) => {
     }
 });
 
-
-router.get("/Notas/simulacros", async (req, res) => {
+router.get("/Notas/simulacro", async (req, res) => {
     try {
         // Buscar todas las notas con los nombres de los simulacros
         const notasConSimulacro = await Notas.findAll({
@@ -165,7 +164,7 @@ router.get("/Notas/simulacros", async (req, res) => {
         const promedioPorSimulacro = {};
 
         notasConSimulacro.forEach(nota => {
-            const simulacroId = nota.Simulacro.id;
+            const simulacroId = nota.Simulacro.Id_Simulacro;
             const simulacroNombre = nota.Simulacro.nombre;
 
             if (!promedioPorSimulacro.hasOwnProperty(simulacroId)) {
