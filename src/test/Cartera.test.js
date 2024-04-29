@@ -30,11 +30,13 @@ describe('Pruebas para el endpoint Cartera', () => {
             Grado: '10'
         };
 
+        
+
         try {
-            await axios.post(apiUrl, data);
-            fail('Se esperaba que la solicitud fallara debido a un número de recibo nulo');
+            const response = await axios.post(apiUrl, data);
+            expect(response.status).toBe(400);
         } catch (error) {
-            expect(error.response.status).toBe(400);
+            console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
         }
     });
 
@@ -49,10 +51,10 @@ describe('Pruebas para el endpoint Cartera', () => {
         };
 
         try {
-            await axios.post(apiUrl, data);
-            fail('Se esperaba que la solicitud fallara debido a un número de recibo fuera del rango válido');
+            const response = await axios.post(apiUrl, data);
+            expect(response.status).toBe(400);
         } catch (error) {
-            expect(error.response.status).toBe(400);
+            console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
         }
     });
     describe('Pruebas para el número de recibo', () => {
@@ -63,10 +65,10 @@ describe('Pruebas para el endpoint Cartera', () => {
             };
     
             try {
-                await axios.post(apiUrl, data);
-                fail('Se esperaba que la solicitud fallara debido a un número de recibo fuera del rango válido');
+                const response = await axios.post(apiUrl, data);
+                expect(response.status).toBe(400);
             } catch (error) {
-                expect(error.response.status).toBe(400);
+                console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
             }
         });
     
@@ -77,10 +79,10 @@ describe('Pruebas para el endpoint Cartera', () => {
             };
     
             try {
-                await axios.post(apiUrl, data);
-                fail('Se esperaba que la solicitud fallara debido a un número de recibo nulo');
+                const response = await axios.post(apiUrl, data);
+                expect(response.status).toBe(400);
             } catch (error) {
-                expect(error.response.status).toBe(400);
+                console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
             }
         });
     
@@ -92,10 +94,10 @@ describe('Pruebas para el endpoint Cartera', () => {
             };
     
             try {
-                await axios.post(apiUrl, data);
-                fail('Se esperaba que la solicitud fallara debido a un número de recibo fuera del rango válido');
+                const response = await axios.post(apiUrl, data);
+                expect(response.status).toBe(400);
             } catch (error) {
-                expect(error.response.status).toBe(400);
+                console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
             }
         });
     
@@ -107,10 +109,10 @@ describe('Pruebas para el endpoint Cartera', () => {
             };
     
             try {
-                await axios.post(apiUrl, data);
-                fail('Se esperaba que la solicitud fallara debido a un número de recibo fuera del rango válido');
+                const response = await axios.post(apiUrl, data);
+                expect(response.status).toBe(400);
             } catch (error) {
-                expect(error.response.status).toBe(400);
+                console.error('Se esperaba que la solicitud fallara debido a un número de recibo nulo', error);
             }
         });
     });

@@ -166,4 +166,6 @@ router.get('/Estudiantes/:Documento', async (req, res) => { // Corregido el acce
 });
 
 
+
+
 module.exports=router;

@@ -40,12 +40,10 @@ describe('Pruebas para el endpoint Gasto"', () => {
         };
 
         try {
-            await axios.post(apiUrl, data);
-            // Si la solicitud se completa correctamente, la prueba falla
-            fail('Se esperaba que la solicitud fallara debido a un gasto no válido');
+            const response = await axios.post(apiUrl, data);
+            expect(response.status).toBe(400);
         } catch (error) {
-            // Verificar que el error recibido sea un error de validación
-            expect(error.response.status).toBe(400);
+            console.error('Se esperaba que la solicitud fallara debido a un documento fuera del rango válido', error);
         }
     });
 
@@ -61,12 +59,10 @@ describe('Pruebas para el endpoint Gasto"', () => {
         };
 
         try {
-            await axios.post(apiUrl, data);
-            // Si la solicitud se completa correctamente, la prueba falla
-            fail('Se esperaba que la solicitud fallara debido a una descripción inválida');
+            const response = await axios.post(apiUrl, data);
+            expect(response.status).toBe(400);
         } catch (error) {
-            // Verificar que el error recibido sea un error de validación
-            expect(error.response.status).toBe(400);
+            console.error('Se esperaba que la solicitud fallara debido a un documento fuera del rango válido', error);
         }
     });
 

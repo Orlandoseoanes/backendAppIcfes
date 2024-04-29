@@ -86,14 +86,20 @@ router.post("/Notas/cargar-excel", upload.single("archivo"), async (req, res) =>
 
 // Función para validar la nota
 function isValidNota(nota) {
-    return typeof nota === 'number' && Number.isInteger(nota) && nota >= 0 && nota <= 100;
+    return (typeof nota === 'string') ? false : (nota === null || (typeof nota === 'number' && Number.isInteger(nota) && nota >= 0 && nota <= 100));
 }
 
-// Función para validar que la nota global sea un número entero dentro del rango de 0 a 500
+
+
 function isValidGlobal(global) {
+    if (global === null || typeof global === 'string') {
+        return false; // Si global es null o un string, retornar false
+    }
+
     const globalInt = parseInt(global); // Convertir la nota global a un entero
     return typeof globalInt === 'number' && Number.isInteger(globalInt) && globalInt >= 0 && globalInt <= 500;
 }
+
 
 router.get("/Notas/Todas",async (req,res)=>{
   try{
