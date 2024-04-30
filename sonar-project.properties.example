@@ -1,0 +1,18 @@
+# Nombre del proyecto
+sonar.projectKey=my_project
+sonar.projectName=My Project
+sonar.projectVersion=1.0
+
+# Rutas de código fuente a analizar
+sonar.sources=src
+
+# Lenguaje del proyecto
+sonar.language=java
+
+# Ruta del archivo de configuración de SonarQube (opcional)
+# sonar.configPath=sonar-project.properties
+
+# Información de conexión a SonarQube
+sonar.host.url=http://localhost:9000
+sonar.login=admin
+sonar.password=admin
