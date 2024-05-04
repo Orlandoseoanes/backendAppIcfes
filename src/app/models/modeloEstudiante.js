@@ -1,4 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = require("../conexion");
@@ -51,14 +52,38 @@ const Estudiantes = sequelize.define(
     },
     Grado:{
       type:DataTypes.STRING
-    }
+    },
+    Usuario: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    Contrasena: {
+      type: DataTypes.STRING,
+    },
   },
   {
+    hooks: {
+      beforeCreate: async (estudiante) => {
+        // Hash de la contraseña solo si se proporciona
+        if (estudiante.Contrasena) {
+          estudiante.Contrasena = await bcrypt.hash(estudiante.Contrasena, 10);
+        }
+      },
+    },
+
     sequelize,
     modelName: "Estudiante",
     createdAt: false,
     updatedAt: false,
-  }
+  },
+  
+    
+  
 );
+
+Estudiantes.prototype.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.Contrasena);
+};
+
 
 module.exports = Estudiantes;

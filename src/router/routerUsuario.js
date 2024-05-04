@@ -9,7 +9,7 @@ const modelosGastos = require('../app/models/modeloGasto');
 
 //REGISTRO USUARIO
 router.post('/Usuario/Registro', async (req, res) => {
-  const { cedula, nombre, apellido, usuario, contrasena, Nit_institucion } = req.body;
+  const { cedula, nombre, apellido, usuario, contrasena, Nit_institucion,Rol } = req.body;
 
   // Validación para la Cédula
   if (!isValidCedula(cedula)) {
@@ -45,6 +45,12 @@ router.post('/Usuario/Registro', async (req, res) => {
           message: 'Contraseña no válida. Debe tener entre 5 y 50 caracteres.'
       });
   }
+  const ValidsRoles = [
+    "SuperAdmin","Admin"
+];
+if (!ValidsRoles.includes(Rol)) {
+    throw new Error('Invalid roles');
+}
 
   try {
       const newUsuario = await modelosUsuario.create({
@@ -54,6 +60,7 @@ router.post('/Usuario/Registro', async (req, res) => {
           usuario,
           contrasena,
           Nit_institucion: Nit_institucion,
+          Rol
       });
       res.status(201).json({
           message: 'Usuario creado exitosamente',

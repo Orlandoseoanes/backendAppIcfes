@@ -13,6 +13,9 @@ const Usuario = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
+    Rol:{
+      type:DataTypes.STRING
+    },
     nombre: {
       type: DataTypes.STRING,
     },
@@ -51,7 +54,6 @@ const Usuario = sequelize.define(
   }
 );
 
-// Método para comparar contraseñas durante la autenticación
 Usuario.prototype.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.contrasena);
 };

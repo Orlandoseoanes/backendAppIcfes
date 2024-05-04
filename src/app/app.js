@@ -1,7 +1,9 @@
 const config = require("../config");
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require("mongoose");
 const app = express();
+
 
 var createError = require('http-errors');
 const cors = require('cors');
@@ -17,6 +19,9 @@ const routerCartera=require("../router/routerCartera");
 const routerGasto=require("../router/routerGasto");
 const routerNotas= require("../router/routerNotas");
 const routerSimulacros= require("../router/routerSimulacro");
+const routerBancoPreguntas=require("../router/routerBancoPreguntas")
+const routerPractica=require("../router/routerPractica")
+const routerContenidoPractica=require("../router/routerContenidoPractica")
 /////
 app.use(morgan("dev"));
 app.get('/', (req, res) => {
@@ -37,6 +42,9 @@ app.use("/API/V2",routerCartera);
 app.use("/API/V2",routerGasto);
 app.use("/API/V2",routerNotas);
 app.use("/API/V2",routerSimulacros);
+app.use("/API/V2",routerBancoPreguntas);
+app.use("/API/V2",routerPractica);
+app.use("/API/V2",routerContenidoPractica);
 
 
 

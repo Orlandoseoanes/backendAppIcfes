@@ -2,7 +2,6 @@ const { Model, DataTypes } = require("sequelize");
 
 // Option 3: Passing parameters separately (other dialects)
 const sequelize = require("../conexion");
-const Usuario = require("./modelosusuario");
 
 const Gastos = sequelize.define(
   "Gastos",
@@ -24,13 +23,6 @@ const Gastos = sequelize.define(
     },
     Descripcion: {
       type: DataTypes.STRING,
-    },
-    Id_Usuario: {
-      type: DataTypes.BIGINT,
-      references: {
-        Model: Usuario,
-        key: "cedula",
-      },
     },
     Grado:{
       type:DataTypes.STRING

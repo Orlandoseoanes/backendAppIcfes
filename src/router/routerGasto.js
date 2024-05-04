@@ -3,7 +3,7 @@ const router = require("express").Router();
 const ModeloGasto=require("../app/models/modeloGasto");
 
 router.post("/Registro/Gasto", async (req, res) => {
-    const { Fecha, Tipo_gasto, Gasto, Descripcion, Id_Usuario, Grado } = req.body;
+    const { Fecha, Tipo_gasto, Gasto, Descripcion, Grado } = req.body;
 
     try {
 
@@ -24,7 +24,6 @@ router.post("/Registro/Gasto", async (req, res) => {
             Tipo_gasto,
             Gasto,
             Descripcion,
-            Id_Usuario,
             Grado
         });
 

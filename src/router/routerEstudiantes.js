@@ -1,7 +1,7 @@
 const router =require("express").Router()
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken'); // Importa la biblioteca jsonwebtoken
+const jwt = require('jsonwebtoken'); 
 const { Router } = require("express");
 const ModeloEstudiantil= require("../app/models/modeloEstudiante")
 
@@ -21,8 +21,11 @@ router.post('/Registro/Estudiante', async (req, res) => {
         TelefonoAcu,
         Estado,
         Nit_institucion,
-        Grado
+        Grado,
+        Usuario,
+        Contrasena
     } = req.body;
+    console.log(req.body);
 
     try {
         // Validación del tipo de documento
@@ -94,6 +97,19 @@ router.post('/Registro/Estudiante', async (req, res) => {
             throw new Error('Grado inválido');
         }
 
+        if (!isValidUsuario(Usuario)) {
+            return res.status(400).json({
+                message: 'Usuario no válido. Debe tener entre 5 y 50 caracteres.'
+            });
+        }
+      
+        // Validación para la Contraseña
+        if (!isValidContrasena(Contrasena)) {
+            return res.status(400).json({
+                message: 'Contraseña no válida. Debe tener entre 5 y 50 caracteres.'
+            });
+        }
+
         // Crear el estudiante
         const NewEstudiante = await ModeloEstudiantil.create({
             Tipo_documento,
@@ -108,9 +124,10 @@ router.post('/Registro/Estudiante', async (req, res) => {
             TelefonoAcu,
             Estado,
             Nit_institucion,
-            Grado
+            Grado,
+            Usuario,
+            Contrasena
         });
-
         res.status(201).json({
             message: 'Estudiante creado exitosamente',
             usuario: NewEstudiante,
@@ -123,7 +140,15 @@ router.post('/Registro/Estudiante', async (req, res) => {
         });
     }
 });
-
+// Función para validar el Usuario
+function isValidUsuario(usuario) {
+    return typeof usuario === 'string' && usuario.length >= 5 && usuario.length <= 50;
+  }
+  
+  // Función para validar la Contraseña
+  function isValidContrasena(contrasena) {
+    return typeof contrasena === 'string' && contrasena.length >= 5 && contrasena.length <= 50;
+  }
 
 //TODOS LOS ESTUDIANTES
 router.get('/Estudiantes/Todos', async (req, res) => { // Corregido el orden de req, res
@@ -164,6 +189,54 @@ router.get('/Estudiantes/:Documento', async (req, res) => { // Corregido el acce
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+router.post('/Student/login', async (req, res) => {
+    const { Usuario, Contrasena } = req.body;
+  
+    try {
+      const EstudianteEncontrado = await ModeloEstudiantil.findOne({
+        where: {
+          Usuario: Usuario,
+        },
+      });
+  
+      if (!EstudianteEncontrado) {
+        return res.status(401).json({
+          message: 'Usuario no encontrado',
+        });
+      }
+  
+      const esValido = await EstudianteEncontrado.comparePassword(Contrasena);
+  
+      if (!esValido) {
+        return res.status(401).json({
+          message: 'Contraseña incorrecta',
+        });
+      }
+  
+  
+      const payload = {
+        nombre: EstudianteEncontrado.Nombre,
+        apellido: EstudianteEncontrado.Apellido,
+        Nit_institucion:EstudianteEncontrado.Nit_institucion,
+        usuario:EstudianteEncontrado.Usuario
+      };
+  
+      const token = jwt.sign(payload, 'secretoDelToken'); // Cambia 'secretoDelToken' por tu secreto real
+  
+      res.status(200).json({
+        message: 'Inicio de sesión exitoso',
+        status:200,
+        token
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: 'Error al iniciar sesión',
+        error,
+      });
+    }
+  });
 
 
 
