@@ -191,7 +191,7 @@ router.get('/Estudiantes/:Documento', async (req, res) => { // Corregido el acce
 });
 
 router.post('/Student/login', async (req, res) => {
-    const { Usuario, Contrasena } = req.body;
+    const { usuario, contrasena } = req.body;
   
     try {
       const EstudianteEncontrado = await ModeloEstudiantil.findOne({
