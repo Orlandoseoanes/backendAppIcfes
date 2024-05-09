@@ -196,7 +196,7 @@ router.post('/Student/login', async (req, res) => {
     try {
       const EstudianteEncontrado = await ModeloEstudiantil.findOne({
         where: {
-          Usuario: Usuario,
+          Usuario: usuario,
         },
       });
   
@@ -206,7 +206,7 @@ router.post('/Student/login', async (req, res) => {
         });
       }
   
-      const esValido = await EstudianteEncontrado.comparePassword(Contrasena);
+      const esValido = await EstudianteEncontrado.comparePassword(contrasena);
   
       if (!esValido) {
         return res.status(401).json({
