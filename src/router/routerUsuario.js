@@ -132,7 +132,8 @@ router.post('/login', async (req, res) => {
       nombre: usuarioEncontrado.nombre,
       apellido: usuarioEncontrado.apellido,
       Nit_institucion:usuarioEncontrado.Nit_institucion,
-      usuario:usuarioEncontrado.usuario
+      usuario:usuarioEncontrado.usuario,
+      Rol:usuarioEncontrado.Rol
     };
 
     const token = jwt.sign(payload, 'secretoDelToken'); // Cambia 'secretoDelToken' por tu secreto real
