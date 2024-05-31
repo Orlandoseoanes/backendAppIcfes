@@ -58,33 +58,6 @@ router.post("/Registro/Simulacro", async (req, res) => {
     }
 });
 
-// Función para validar la Empresa
-function isValidEmpresa(empresa) {
-    return typeof empresa === 'string' && empresa.length >= 5 && empresa.length <= 50;
-}
-
-// Función para validar Cuadernillos Comprados
-function isValidCuadernillosComprados(cuadernillos) {
-    return typeof cuadernillos === 'number' && cuadernillos >= 1 && cuadernillos <= 500;
-}
-
-// Función para validar Fecha Simulacro
-function isValidFechaSimulacro(fecha) {
-    const fechaActual = new Date();
-    const fechaLimite = new Date('2025-12-31');
-    const fechaSimulacro = new Date(fecha);
-
-    // Verificar si la fecha es válida y está dentro del rango
-    return fechaSimulacro >= fechaActual && fechaSimulacro <= fechaLimite;
-}
-
-
-// Función para validar Grado
-function isValidGrado(grado) {
-    return grado === "10" || grado === "11";
-}
-
-
 router.get("/Simulacros/TodosSimulacros",async(req,res)=>{
     try {
         const Simulacro = await ModeloSimulacro.findAll();
@@ -172,6 +145,31 @@ router.delete("/Simulacro/:id", async (req, res) => {
     }
 });
 
+// Función para validar la Empresa
+function isValidEmpresa(empresa) {
+    return typeof empresa === 'string' && empresa.length >= 5 && empresa.length <= 50;
+}
+
+// Función para validar Cuadernillos Comprados
+function isValidCuadernillosComprados(cuadernillos) {
+    return typeof cuadernillos === 'number' && cuadernillos >= 1 && cuadernillos <= 500;
+}
+
+// Función para validar Fecha Simulacro
+function isValidFechaSimulacro(fecha) {
+    const fechaActual = new Date();
+    const fechaLimite = new Date('2025-12-31');
+    const fechaSimulacro = new Date(fecha);
+
+    // Verificar si la fecha es válida y está dentro del rango
+    return fechaSimulacro >= fechaActual && fechaSimulacro <= fechaLimite;
+}
+
+
+// Función para validar Grado
+function isValidGrado(grado) {
+    return grado === "10" || grado === "11";
+}
 
 
 module.exports = router;

@@ -28,7 +28,6 @@ router.post("/Question/Register", async (req, res) => {
     }
 });
 
-
 router.get("/Questions",async(req,res)=>{
     try {
         const questions = await QuestionBankModel.find();
@@ -38,7 +37,6 @@ router.get("/Questions",async(req,res)=>{
         res.status(500).json({ error: "Internal server error" });
     }
 })
-
 
 router.get("/Questions/:Subject",async(req,res)=>{
     try {
