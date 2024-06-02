@@ -2,8 +2,8 @@ const express = require("express");
 const router = express();
 const QuestionBankModel = require("../app/models/modeloBancoPreguntas");
 const multer = require("multer");
-const { storage } = require("../app/firebase"); // Importa el almacenamiento desde tu archivo firebase.js
-const sharp = require('sharp'); // Asegúrate de tener Sharp instalado
+const fs = require('fs');
+const path = require('path');
 // Configuración de multer para guardar los archivos en el directorio temporal
 const upload = multer({
   storage: multer.memoryStorage(), // Almacenamiento en memoria para manejar archivos temporales
@@ -12,73 +12,57 @@ const upload = multer({
   },
 });
 
-  router.post('/Question/Register', upload.single('Photo'), async (req, res) => {
-    try {
-        const { id, Question, Answer, OptionA, OptionB, OptionC, OptionD, Subject } = req.body;
+router.post('/Question/Register', upload.single('Photo'), async (req, res) => {
+  try {
+      const { id, Question, Answer, OptionA, OptionB, OptionC, OptionD, Subject } = req.body;
 
-        // Validar que todos los campos requeridos estén presentes
-        if (!Question || !Answer || !OptionA || !OptionB || !OptionC || !OptionD || !Subject) {
-            return res.status(400).json({ error: "Todos los campos son obligatorios." });
-        }
+      // Validar que todos los campos requeridos estén presentes
+      if (!Question || !Answer || !OptionA || !OptionB || !OptionC || !OptionD || !Subject) {
+          return res.status(400).json({ error: "Todos los campos son obligatorios." });
+      }
 
+      if (req.file) {
+          // Si hay un archivo adjunto
+          const file = req.file;
+          const nombreArchivo = `question-${Question}-${Date.now()}.jpg`;
+          const rutaArchivo = path.join(__dirname, 'imagenes', nombreArchivo); // Ruta donde se guardará el archivo
 
-        if (req.file) {
-            // Si hay un archivo adjunto
-            const file = req.file;
-            const nombreArchivo = `question-${Question}-${Date.now()}.jpg`;
-            const fileUpload = storage.file(nombreArchivo);
-            const blobStream = fileUpload.createWriteStream({
-                metadata: {
-                    contentType: file.mimetype,
-                }
-            });
+          // Guardar el archivo localmente
+          fs.writeFileSync(rutaArchivo, file.buffer);
 
-            blobStream.on('error', (error) => {
-                console.error('Error al cargar el archivo:', error);
-                res.status(500).json({ error: 'Error al cargar el archivo' });
-            });
+          // Guardar la información de la pregunta en la base de datos
+          const newQuestion = new QuestionBankModel({
+              Question,
+              Answer,
+              OptionA,
+              OptionB,
+              OptionC,
+              OptionD,
+              Photo: nombreArchivo,
+              Subject,
+          });
+          const savedQuestion = await newQuestion.save();
 
-            blobStream.on('finish', async () => {
-                try {
-                    // Finalizada la carga del archivo, se guarda la pregunta en la base de datos
-                    const newQuestion = new QuestionBankModel({
-                        Question,
-                        Answer,
-                        OptionA,
-                        OptionB,
-                        OptionC,
-                        OptionD,
-                        Photo: nombreArchivo,
-                        Subject,
-                    });
-                    const savedQuestion = await newQuestion.save();
+          res.status(201).json(savedQuestion);
+      } else {
+          // Si no hay archivo adjunto, guardar solo la información de la pregunta en la base de datos
+          const newQuestion = new QuestionBankModel({
+              Question,
+              Answer,
+              OptionA,
+              OptionB,
+              OptionC,
+              OptionD,
+              Subject,
+          });
+          const savedQuestion = await newQuestion.save();
 
-                    res.status(201).json(savedQuestion);
-                } catch (error) {
-                    console.error('Error al cargar la foto o agregar la pregunta:', error);
-                    res.status(500).json({ error: 'Error al cargar la foto o agregar la pregunta' });
-                }
-            });
-
-            blobStream.end(file.buffer); 
-        } else {
-            const newQuestion = new QuestionBankModel({
-                Question,
-                Answer,
-                OptionA,
-                OptionB,
-                OptionC,
-                OptionD,
-                Subject,
-            });
-            const savedQuestion = await newQuestion.save();
-
-            res.status(201).json(savedQuestion);
-        }
-    } catch (error) {
-        console.error('Error creating question:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+          res.status(201).json(savedQuestion);
+      }
+  } catch (error) {
+      console.error('Error creating question:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 
