@@ -7,8 +7,8 @@ const ModelPractice =new Schema({
         type: String,
         require: true
     },
-    IdPregunta:{
-        type:String,
+    Preguntas:{
+        type:Array,
         require: true
     }
 })

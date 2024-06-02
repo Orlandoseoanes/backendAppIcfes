@@ -1,13 +1,25 @@
 const express = require("express");
 const router = express();
 const ModelContentPractice = require("../app/models/modeloContenidoPractica")
+const QuestionBankModel = require("../app/models/modeloBancoPreguntas");
+
 
 router.post("/ContentPractice/Register", async (req, res) => {
  try{
-    const{ IdPractica,IdPregunta}=req.body;
+    const{ IdPractica,Preguntas}=req.body;
+    
+    let questionsArray = [];
+
+    // Consultar cada pregunta usando los _id proporcionados
+    for (const questionId of Preguntas) {
+      const question = await QuestionBankModel.findById(questionId);
+      if (question) {
+        questionsArray.push(question);
+      }
+    }
     const NewContentPractice = new ModelContentPractice({
         IdPractica,
-        IdPregunta
+        Preguntas:questionsArray
     });
     const SavedContentPractice = await NewContentPractice.save();
     res.status(201).json(SavedContentPractice);

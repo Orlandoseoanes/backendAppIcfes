@@ -1,11 +1,8 @@
 const {Schema, model } = require("mongoose")
 const connect=require("../conexionMONGO")
 
+
 const QuestionBank= new Schema({
-    id: {
-        type: String,
-        required: true
-    },
     Question:{
         type: String,
         required: true
