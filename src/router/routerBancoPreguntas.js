@@ -100,11 +100,11 @@ router.get("/Questions/Individual/:_id", async (req, res) => {
 router.put("/Question/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
-    const { Question, Answer, OptionA, OptionB, OptionC, OptionD, Photo } =
+    const { Question, Answer, OptionA, OptionB, OptionC, OptionD } =
       req.body;
     const question = await QuestionBankModel.findOneAndUpdate(
       { _id },
-      { Question, Answer, OptionA, OptionB, OptionC, OptionD, Photo },
+      { Question, Answer, OptionA, OptionB, OptionC, OptionD},
       { new: true }
     );
     res.status(200).json(question);
@@ -114,12 +114,13 @@ router.put("/Question/:_id", async (req, res) => {
   }
 });
 
-router.delete("/Question/_id", async (req, res) => {
+router.delete("/Question/:_id", async (req, res) => {
   try {
-    const { Subject } = req.params;
-    const { id } = req.body;
-    const question = await QuestionBankModel.findOneAndDelete({ Subject, id });
-    res.status(200).json(question);
+    const { _id } = req.params;
+    const question = await QuestionBankModel.findOneAndDelete({ _id });
+    res.status(200).json({
+     message: "pregunta borrada"
+    });
   } catch (error) {
     console.error("Error deleting question:", error);
     res.status(500).json({ error: "Internal server error" });
