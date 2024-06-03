@@ -89,8 +89,6 @@ function isValidNota(nota) {
     return (typeof nota === 'string') ? false : (nota === null || (typeof nota === 'number' && Number.isInteger(nota) && nota >= 0 && nota <= 100));
 }
 
-
-
 function isValidGlobal(global) {
     if (global === null || typeof global === 'string') {
         return false; // Si global es null o un string, retornar false

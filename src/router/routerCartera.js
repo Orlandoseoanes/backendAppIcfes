@@ -65,6 +65,31 @@ router.get("/Pagos/Todos",async (req,res)=>{
     
 });
 
+router.get("/Pagos/:Documento_alumno", async (req, res) => {
+    const { Documento_alumno } = req.params;
+    try {
+        const cartera = await ModeloCartera.findAll({
+            where: {
+                Documento_alumno,
+            },
+        });
+        if (cartera.length === 0) {
+            return res.status(404).json({
+                message: 'No se encontraron Pagos para el alumno',
+            });
+        }
+        res.status(200).json({
+            message: 'Pagos encontrados',
+            cartera,
+        });
+    } catch (error) {
+        console.error('Error al obtener los Pagos:', error);
+        res.status(500).json({
+            message: 'Error interno del servidor',
+        });
+    }
+})
+
 
 
 module.exports = router;

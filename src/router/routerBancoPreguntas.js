@@ -65,7 +65,6 @@ router.post('/Question/Register', upload.single('Photo'), async (req, res) => {
   }
 });
 
-
 router.get("/Questions", async (req, res) => {
   try {
     const questions = await QuestionBankModel.find();
@@ -115,7 +114,6 @@ router.put("/Question/:_id", async (req, res) => {
   }
 });
 
-
 router.delete("/Question/_id", async (req, res) => {
   try {
     const { Subject } = req.params;
@@ -127,5 +125,24 @@ router.delete("/Question/_id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+router.get("/Questions/Image/:Nombre",async (req, res) =>{
+  try {
+    const nombreArchivo = req.params.Nombre;
+    const rutaArchivo = path.join(__dirname, 'imagenes', nombreArchivo); // Ruta donde se encuentra el archivo
+
+    // Verificar si el archivo existe
+    if (fs.existsSync(rutaArchivo)) {
+        // Enviar el archivo como respuesta
+        res.sendFile(rutaArchivo);
+    } else {
+        // Si el archivo no existe, enviar una respuesta de error
+        res.status(404).json({ error: "Archivo no encontrado" });
+    }
+} catch (error) {
+    console.error('Error al obtener la imagen:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+}
+})
 
 module.exports = router;

@@ -2,6 +2,8 @@ const router =require("express").Router()
 const { Router } = require("express");
 
 const modeloDocente=require("../app/models/modeloDocente");
+const { where } = require("../app/models/modeloContenidoPractica");
+const { Where } = require("sequelize/lib/utils");
 
 //registro docente
 router.post("/Registro/Docente", async (req, res) => {
@@ -65,8 +67,8 @@ router.post("/Registro/Docente", async (req, res) => {
         });
     }
 });
-//todos los docentes
 
+//todos los docentes
 router.get('/Docentes/Todos', async (req, res) => { // Corregido el orden de req, res
     try {
         const Docente = await modeloDocente.findAll();
@@ -107,7 +109,6 @@ router.get('/Docentes/:Documento', async (req, res) => { // Corregido el acceso 
     }
 });
 
-//ACTUALIZAR DOCENTE
 //ACTUALIZAR DOCENTE
 router.put("/Docente/:Documento", async (req, res) => {
     const { Documento } = req.params;
@@ -151,20 +152,21 @@ router.put("/Docente/:Documento", async (req, res) => {
     }
 });
 
-
-
 //BORRAR DOCENTE
-router.delete("/Docente/:id", async (req, res) => {
-    const { id } = req.params; // Obtener el ID del docente de los parámetros de la URL
+router.delete("/Docente/:Documento", async (req, res) => {
+    const { Documento } = req.params; // Obtener el ID del docente de los parámetros de la URL
 
     // Verificar si el ID proporcionado es válido
-    if (!id) {
+    if (!Documento) {
         return res.status(400).json({ error: "ID de docente no válido" });
     }
 
     try {
         // Buscar el docente por su ID en la base de datos
-        const docente = await modeloDocente.findByPk(id);
+        const docente = await modeloDocente.findOne({
+            where: { Documento: Documento } // Utilizar Nit para buscar en lugar de Nit_institucion 
+        });
+
 
         // Si el docente no se encuentra, devolver un error
         if (!docente) {

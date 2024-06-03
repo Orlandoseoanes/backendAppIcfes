@@ -2,6 +2,8 @@ const express = require("express");
 const router = express();
 const ModelContentPractice = require("../app/models/modeloContenidoPractica")
 const QuestionBankModel = require("../app/models/modeloBancoPreguntas");
+const ModeloEstudiantil= require("../app/models/modeloEstudiante")
+const ModeloLogPracticas=require('../app/models/modeloLogPracticas')
 
 
 router.post("/ContentPractice/Register", async (req, res) => {
@@ -55,6 +57,103 @@ router.get("/ContentPractice/GetByPracticeId/:Id", async (req, res) => {
     }catch(error){
         console.error("Error finding content practice:", error);
         res.status(500).json({error: "Internal server error"});
+    }
+})
+
+router.post("/ContentPractice/Evaluate", async (req, res) => {
+    try {
+        const { IdPractica, Respuestas,CedulaAlumno } = req.body;
+
+        // Buscar el contenido de práctica correspondiente en la base de datos
+        const ContentPractice = await ModelContentPractice.findOne({ IdPractica });
+
+        if (!ContentPractice) {
+            return res.status(404).json({ error: "Práctica no encontrada" });
+        }
+        const Estudiante = await ModeloEstudiantil.findOne({
+            where: { Documento: CedulaAlumno }, 
+            attributes: ['Tipo_documento', 'Documento', 'Nombre','Apellido'] 
+            
+        });
+
+        if (!Estudiante) {
+            return res.status(404).json({ error: 'Estudiante not found' });
+        }
+        
+        // Inicializar contadores
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let totalQuestions = ContentPractice.Preguntas.length;
+        // Inicializar array para resultados
+        let results = [];
+        // Iterar sobre cada pregunta del contenido de práctica y comparar las respuestas
+        for (let i = 0; i < ContentPractice.Preguntas.length; i++) {
+            const correctAnswer = ContentPractice.Preguntas[i].Answer;
+            const userAnswer = Respuestas[i];
+            // Comparar la respuesta del usuario con la respuesta correcta de la pregunta
+            if (userAnswer === correctAnswer) {
+                correctAnswers++;
+                results.push({
+                    Pregunta: ContentPractice.Preguntas[i].Question,
+                    RespuestaCorrecta: correctAnswer,
+                    RespuestaUsuario: userAnswer,
+                    Correcta: true
+                });
+            } else {
+                wrongAnswers++;
+                results.push({
+                    Pregunta: ContentPractice.Preguntas[i].Question,
+                    RespuestaCorrecta: correctAnswer,
+                    RespuestaUsuario: userAnswer,
+                    Correcta: false
+                });
+            }
+        }
+        const score = (correctAnswers / totalQuestions) * 100;
+
+        const newLogPractica = new ModeloLogPracticas({
+            IdPractica,
+            Alumno: {
+                Tipo_documento: Estudiante.Tipo_documento,
+                Documento: Estudiante.Documento,
+                Nombre: Estudiante.Nombre,
+                Apellido: Estudiante.Apellido
+            },
+            Nota: score,
+            Fecha: new Date()
+        });
+        await newLogPractica.save();
+        res.status(200).json({
+            Estudiante,
+            correctAnswers,
+            wrongAnswers,
+            results,
+            score
+        });
+    } catch (error) {
+        console.error("Error evaluating content practice:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/ContentPractice/GetLogPractices", async (req, res) => {
+    try {
+        const logPractices = await ModeloLogPracticas.find();
+        res.status(200).json(logPractices);
+    } catch (error) {
+        console.error("Error getting log practices:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+router.get("/ContentPractice/GetLogPractices/:IdPractica",async(req,res) =>{
+    try{
+        const {IdPractica} = req.params;
+        const logPractices = await ModeloLogPracticas.find({IdPractica});
+        res.status(200).json(logPractices);
+    }catch(error){
+        console.error("Error getting log practices:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 })
 
