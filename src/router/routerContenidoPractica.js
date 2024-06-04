@@ -60,6 +60,30 @@ router.get("/ContentPractice/GetByPracticeId/:Id", async (req, res) => {
     }
 })
 
+router.delete("/ContentPractice/:_Id", async (req, res) => {
+    try {
+        const { _Id } = req.params;
+        
+        // Verificar si el ID proporcionado es válido
+        if (!_Id) {
+            return res.status(400).json({ error: "El ID es requerido" });
+        }
+
+        // Intentar eliminar el documento
+        const result = await ModelContentPractice.findByIdAndDelete(_Id);
+
+        // Verificar si se encontró y eliminó el documento
+        if (!result) {
+            return res.status(404).json({ error: "ContentPractice no encontrado" });
+        }
+
+        res.status(200).json({ message: "ContentPractice eliminado" });
+    } catch (error) {
+        console.error("Error eliminando ContentPractice:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
 router.post("/ContentPractice/Evaluate", async (req, res) => {
     try {
         const { IdPractica, Respuestas,CedulaAlumno } = req.body;
