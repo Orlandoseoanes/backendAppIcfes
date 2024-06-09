@@ -219,7 +219,8 @@ router.post('/Student/login', async (req, res) => {
         nombre: EstudianteEncontrado.Nombre,
         apellido: EstudianteEncontrado.Apellido,
         Nit_institucion:EstudianteEncontrado.Nit_institucion,
-        usuario:EstudianteEncontrado.Usuario
+        usuario:EstudianteEncontrado.Usuario,
+        Documento:EstudianteEncontrado.Documento
       };
   
       const token = jwt.sign(payload, 'secretoDelToken'); // Cambia 'secretoDelToken' por tu secreto real
