@@ -7,6 +7,10 @@ const ModelPractice =new Schema({
         type: String,
         require: true
     },
+    Nombre:{
+        type: String,
+        require: true
+    },
     Preguntas:{
         type:Array,
         require: true

@@ -4,11 +4,15 @@ const ModelContentPractice = require("../app/models/modeloContenidoPractica")
 const QuestionBankModel = require("../app/models/modeloBancoPreguntas");
 const ModeloEstudiantil= require("../app/models/modeloEstudiante")
 const ModeloLogPracticas=require('../app/models/modeloLogPracticas')
+const ModelPractice = require("../app/models/modeloPractica");
 
 
 router.post("/ContentPractice/Register", async (req, res) => {
  try{
     const{ IdPractica,Preguntas}=req.body;
+    const Practices = await ModelPractice.findByPk(IdPractica);
+
+    const name= Practices.nombre;
     
     let questionsArray = [];
 
@@ -21,6 +25,7 @@ router.post("/ContentPractice/Register", async (req, res) => {
     }
     const NewContentPractice = new ModelContentPractice({
         IdPractica,
+        Nombre:name,
         Preguntas:questionsArray
     });
     const SavedContentPractice = await NewContentPractice.save();
