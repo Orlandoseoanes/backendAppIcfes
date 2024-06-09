@@ -15,16 +15,8 @@ const upload = multer({
 
 router.post("/Question/Register", upload.single("Photo"), async (req, res) => {
   try {
-    const {
-      id,
-      Question,
-      Answer,
-      OptionA,
-      OptionB,
-      OptionC,
-      OptionD,
-      Subject,
-    } = req.body;
+    const { Question, Answer, OptionA, OptionB, OptionC, OptionD, Subject } =
+      req.body;
 
     // Validar que todos los campos requeridos estén presentes
     if (
@@ -39,6 +31,44 @@ router.post("/Question/Register", upload.single("Photo"), async (req, res) => {
       return res
         .status(400)
         .json({ error: "Todos los campos son obligatorios." });
+    }
+    // Array de sujetos válidos
+    const validSubjects = [
+      "LecturaCritica",
+      "Matematicas",
+      "Sociales",
+      "Naturales",
+      "Ingles",
+    ];
+
+    // Validaciones de longitud mínima y no nulo
+    const fields = {
+      Question,
+      Answer,
+      OptionA,
+      OptionB,
+      OptionC,
+      OptionD,
+      Subject,
+    };
+    for (const [key, value] of Object.entries(fields)) {
+      if (value == null || value.length < 5) {
+        return res
+          .status(400)
+          .json({
+            error: `${key} debe tener al menos 5 caracteres y no puede ser nulo.`,
+          });
+      }
+    }
+
+    // Validación del Subject
+    if (!validSubjects.includes(Subject)) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "El campo Subject debe ser uno de los siguientes: LecturaCritica, Matematicas, Sociales, Naturales, Ingles.",
+        });
     }
 
     if (req.file) {
@@ -171,5 +201,6 @@ router.get("/Questions/Image/:Nombre", async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 });
+
 
 module.exports = router;
