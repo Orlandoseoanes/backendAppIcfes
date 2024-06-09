@@ -1,9 +1,15 @@
 const { Sequelize } = require("sequelize");
+const iconv = require('iconv-lite');
 
+// Intenta registrar la codificación 'cesu8'
+iconv.encodingExists('cesu8');
 
 const sequelize = new Sequelize('preicfes', 'prueba','tMeque+2023+' ,{
     host:'srv435312.hstgr.cloud',
     dialect: "mysql",
+    dialectOptions: {
+        charset: 'utf8mb4'
+    } 
 });
 
 async function testConnection() {
