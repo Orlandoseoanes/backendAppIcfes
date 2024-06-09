@@ -187,4 +187,22 @@ router.get("/ContentPractice/GetLogPractices/:IdPractica",async(req,res) =>{
 })
 
 
+router.get('/ContentPractice/GetLogPractices/student/:Cedula',async(req,res)=>{
+    try{
+        const {Cedula} = req.params;
+        const cedulaNumber = parseInt(Cedula, 10);
+        const logPractices = await ModeloLogPracticas.find({'Alumno.Documento':cedulaNumber});
+
+        if (!logPractices.length) {
+            return res.status(404).json({ message: "No se encontraron prácticas para este estudiante" });
+        }
+        
+        res.status(200).json(logPractices);
+    }catch(error){
+        console.error("Error getting log practices:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+
 module.exports = router;
